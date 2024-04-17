@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'customerEntity.dart';
 import 'data.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -12,17 +13,15 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Customer savedCustomer;
-  late int index;
-  String? editedName;
-  String? editedGender;
-  DateTime editedBirthday = DateTime.now();
-  String? editedCountry;
+  late String? editedName;
+  late String? editedGender;
+  late DateTime editedBirthday;
+  late String? editedCountry;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    index = ModalRoute.of(context)!.settings.arguments as int;
-    savedCustomer = listCustomer.elementAt(index);
+    savedCustomer = ModalRoute.of(context)!.settings.arguments as Customer;
     editedName = savedCustomer.name;
     editedGender = savedCustomer.gender;
     editedBirthday = savedCustomer.birthday;
@@ -144,18 +143,13 @@ class _EditPageState extends State<EditPage> {
                 if(editedGender == null)
                   Text('* Please select gender', style: TextStyle(color: Colors.red,),),
                 SizedBox(height: 20),
-                // Dropdown selection with validation
+
                 DropdownButtonFormField<String>(
                   hint: Text('Select a country'),
                   value: editedCountry,
                   onChanged: (newValue) {
                     setState(() {
-                      if(newValue != null){
-                        editedCountry = newValue;
-                      } else {
-                        editedCountry = null;
-                      }
-
+                      editedCountry = newValue; // Update editedCountry when a new value is selected
                     });
                   },
                   items: countries.map<DropdownMenuItem<String>>((String country) {
@@ -165,8 +159,8 @@ class _EditPageState extends State<EditPage> {
                     );
                   }).toList(),
                 ),
-                if (editedCountry == null)
-                  Text('* Please select a country', style: TextStyle(color: Colors.red,),),
+                if (editedCountry == null) // Display validation message if no country is selected
+                  Text('* Please select a country', style: TextStyle(color: Colors.red)),
                 SizedBox(height: 20),
                 // Submit button
                 Row(
@@ -176,8 +170,8 @@ class _EditPageState extends State<EditPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if(editedName != null && editedGender != null && editedCountry != null){
-                            Customer editedCustomer = Customer(name: editedName, birthday: editedBirthday, gender: editedGender, country: editedCountry);
-                            listCustomer[index] = editedCustomer;
+                            Customer editedCustomer = Customer(id: savedCustomer.id ,name: editedName, birthday: editedBirthday, gender: editedGender, country: editedCountry);
+                            updateData(editedCustomer);
                             Navigator.pushNamed(context, 'home');
                           }
                         }

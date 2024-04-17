@@ -1,6 +1,7 @@
 import 'package:crud_app_demo/customerEntity.dart';
-import 'package:crud_app_demo/data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'data.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -163,7 +164,7 @@ class _CreatePageState extends State<CreatePage> {
                           if (_formKey.currentState!.validate()) {
                             if(name != null && selectedGender != null && selectedCountry != null){
                               Customer newCustomer = Customer(name: name, birthday: birthday, gender: selectedGender, country: selectedCountry);
-                              listCustomer.add(newCustomer);
+                              insertData(newCustomer);
                               Navigator.pushNamed(context, 'home');
                             }
                           }

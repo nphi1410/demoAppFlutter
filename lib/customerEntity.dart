@@ -1,28 +1,45 @@
 class Customer {
+  int? id;
   String? name;
   DateTime birthday;
   String? gender;
   String? country;
 
   Customer({
+    this.id,
     required this.name,
     required this.birthday,
     required this.gender,
     required this.country,
   });
+
+  factory Customer.fromJson(Map<String, dynamic> json) {
+    return Customer(
+      id: json['id'],
+      name: json['name'],
+      birthday: DateTime.parse(json['birthday']),
+      gender: json['gender'],
+      country: json['country'],
+    );
+  }
+
 }
 
 List<String> countries = [
-  'Brunei',
-  'Cambodia',
-  'East Timor (Timor-Leste)',
+  'Russia',
+  'Ireland',
+  'Cuba',
+  'Japan',
   'Indonesia',
-  'Laos',
-  'Malaysia',
-  'Myanmar (Burma)',
+  'Sweden',
+  'France',
+  'Iran',
+  'China',
+  'Slovenia',
+  'Peru',
   'Philippines',
-  'Singapore',
-  'Thailand',
+  'Laos',
   'Vietnam',
 ];
+
 
